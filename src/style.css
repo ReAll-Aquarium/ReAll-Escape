@@ -755,7 +755,7 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
 
 
 /* ==========================
-   REALL PIXELS
+   REALL ESCAPE
    ========================== */
 
 .gameTitleMain {
@@ -812,4 +812,28 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
 #startScreen.gameOverMode #playButtonFrame {
   width: 308px;
   height: 60px;
+}
+
+/* ==========================
+   PROUD BUBLINEK
+   ========================== */
+
+.bubble-stream {
+  position: absolute;
+
+  width: 56px;
+  height: 304px;
+
+  bottom: -304px;
+
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 56px 304px;
+
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+
+  pointer-events: none;
+
+  z-index: 12;
 }

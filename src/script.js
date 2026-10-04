@@ -44,6 +44,229 @@ const maxFoodCount = 5;
 
 
 /* ==========================
+   BUBLINKY
+   ========================== */
+
+const bubbleStreamFrame1 = 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAABMCAYAAABd2Ia2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAAA+UlEQVRYR+2VUQ7DIAiGZTdZPNzO1N3tT3cT9rBhKKK1Tdu4zO+pKqD9QaFQgZlZvomIlqsOABhAcpI5HchFDKaZE3reRXayToIdJ8SxZCDrN7sgaDFKQTK0MMzM0/xx1PPFHcWIiOhxJ7IqV3OjjWOMVduBwk1y000ITmXYnLnYopZ5GyyjVNRru6aSk/+SumzCRrdjj6Ren3XpPSWrAEgXepOzTluLeAvgvLcdMBQcHIMthGJ/1ADg5yt3buKwYsheM32c5h5ij2PHLmJ0eg/J0nF6D8lU08b99JBrGO/s77FLvfBVcFO+/pndYu1OzzV0fLR+KCX+DYCxcZocYPe8AAAAAElFTkSuQmCC")';
+const bubbleStreamFrame2 = 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAABMCAYAAABd2Ia2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAAA/klEQVRYR+2VWxLDIAhFpTvpuLiuKd0bk+6EfqQ4iNe82rymnq+ogHohQqGCiIh+ExHlqwBmFmZOTjpnA0HUoOslYechupN3Uvw4oY41A3uFW740YMWoBSmwUUVEun5w9ILBHdWIiOhxJ/JOIYRQzY81jjFW7RqATC2b7Fl/RAAVgnJX4Itb532wglpxj+2alZzeS+tzFj66H3sy5c5Vn+gpmYSZ0w+9yNmma0q0Agbv7UloKja+BxUB7I8WZpbnCztP8tNCgC+ZPdbsHuKP5ccQNdq0h8B0bNpDoGLW+Pgesg/tjb0uq1QMHyUX5e0fWS3S6rTsywWOeBxjiX8D2HhxmkmtFBQAAAAASUVORK5CYII=")';
+
+const bubbleWidth = 56;
+const bubbleHeight = 304;
+
+const bubbleSpeed = 190;
+
+const bubbleSpawnMin = 2500;
+const bubbleSpawnMax = 4000;
+
+const bubbleFrameDuration = 180;
+
+let bubbleStreams = [];
+let nextBubbleSpawn = 0;
+
+
+/* ==========================
+   VYTVOŘENÍ PROUDU BUBLINEK
+   ========================== */
+
+function spawnBubbleStream() {
+
+  const element =
+    document.createElement("div");
+
+  element.classList.add(
+    "bubble-stream"
+  );
+
+// ==========================
+// POZICE BUBLINEK
+// ==========================
+
+let left;
+
+// 20 % šance = levá 1/5 obrazovky
+if (Math.random() < 0.20) {
+
+  left =
+    Math.random() *
+    (GAME_WIDTH * 0.20 - bubbleWidth);
+
+}
+
+// 80 % šance = pravé 2/5 obrazovky
+else {
+
+  const start =
+    GAME_WIDTH * 0.60;
+
+  const end =
+    GAME_WIDTH - bubbleWidth;
+
+  left =
+    start +
+    Math.random() *
+    (end - start);
+}
+
+  element.style.left =
+    `${left}px`;
+
+  /* začíná pod pískem */
+  element.style.bottom =
+    `-${bubbleHeight}px`;
+
+  /* náhodný první snímek */
+  const frame =
+    Math.random() < 0.5 ? 0 : 1;
+
+  element.style.backgroundImage =
+    frame === 0
+      ? bubbleStreamFrame1
+      : bubbleStreamFrame2;
+
+  game.appendChild(element);
+
+  bubbleStreams.push({
+
+    element,
+
+    bottom: -bubbleHeight,
+
+    frame,
+
+    lastFrameTime:
+      performance.now()
+
+  });
+}
+
+
+/* ==========================
+   POHYB BUBLINEK
+   ========================== */
+
+let lastBubbleTime = 0;
+
+function moveBubbleStreams() {
+
+  if (
+    !started ||
+    paused ||
+    gameOverState
+  ) {
+
+    requestAnimationFrame(
+      moveBubbleStreams
+    );
+
+    return;
+  }
+
+  const now =
+    performance.now();
+
+  if (!lastBubbleTime) {
+    lastBubbleTime = now;
+  }
+
+  const dt =
+    (now - lastBubbleTime) / 1000;
+
+  lastBubbleTime = now;
+
+
+  /* ==========================
+     NOVÝ PROUD
+     ========================== */
+
+  if (
+    now >= nextBubbleSpawn
+  ) {
+
+    spawnBubbleStream();
+
+    nextBubbleSpawn =
+      now +
+      bubbleSpawnMin +
+      Math.random() *
+      (
+        bubbleSpawnMax -
+        bubbleSpawnMin
+      );
+  }
+
+
+  /* ==========================
+     POHYB NAHORU
+     ========================== */
+
+  bubbleStreams.forEach(
+    bubble => {
+
+      bubble.bottom +=
+        bubbleSpeed * dt;
+
+      bubble.element.style.bottom =
+        `${bubble.bottom}px`;
+
+
+      /* ==========================
+         ANIMACE OBRÁZKŮ
+         ========================== */
+
+      if (
+        now -
+        bubble.lastFrameTime >=
+        bubbleFrameDuration
+      ) {
+
+        bubble.frame =
+          bubble.frame === 0
+            ? 1
+            : 0;
+
+        bubble.element.style.backgroundImage =
+          bubble.frame === 0
+            ? bubbleStreamFrame1
+            : bubbleStreamFrame2;
+
+        bubble.lastFrameTime =
+          now;
+      }
+
+    }
+  );
+
+
+  /* ==========================
+     ODSTRANĚNÍ NAD HLADINOU
+     ========================== */
+
+  bubbleStreams =
+    bubbleStreams.filter(
+      bubble => {
+
+        if (
+          bubble.bottom >
+          GAME_HEIGHT
+        ) {
+
+          bubble.element.remove();
+
+          return false;
+        }
+
+        return true;
+      }
+    );
+
+
+  requestAnimationFrame(
+    moveBubbleStreams
+  );
+}
+
+
+/* ==========================
    ANIMACE TERČOVCE
    ========================== */
 
@@ -162,6 +385,8 @@ function updatePlantAnimation(time) {
 let started = false;
 let gameOverState = false;
 let paused = false;
+
+moveBubbleStreams();
 
 let score = 0;
 let scoreStartTime = 0;
@@ -1210,7 +1435,19 @@ function reset() {
 
   nextFoodSpawn =
     performance.now() + 900;
+  
+  /* Bublinky */
 
+bubbleStreams.forEach(
+  bubble =>
+    bubble.element.remove()
+);
+
+bubbleStreams = [];
+
+nextBubbleSpawn =
+  performance.now() + 500;
+  
   /* Šablony */
 
   rock.style.left = "-1000px";
